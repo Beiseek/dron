@@ -1,0 +1,46 @@
+{% extends 'landing/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 pt-5 text-white">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <h1 class="mb-4">{{ privacy_policy.title }}</h1>
+            <p><strong>Дата последнего обновления: {{ privacy_policy.last_updated|date:"d.m.Y" }}</strong></p>
+            
+            <div class="privacy-content">
+                {{ privacy_policy.content|linebreaks }}
+            </div>
+            
+            <a href="{% url 'index' %}" class="btn btn-primary mt-4">Вернуться на главную</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.privacy-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #ffffff;
+}
+
+.privacy-content h1, .privacy-content h2, .privacy-content h3 {
+    color: #64b5f6;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-content p {
+    margin-bottom: 1rem;
+}
+
+.privacy-content ul, .privacy-content ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+}
+
+.privacy-content li {
+    margin-bottom: 0.5rem;
+}
+</style>
+{% endblock %}
