@@ -8,7 +8,7 @@ from django.utils.timezone import now
 import os
 from .models import (
     AboutBlock, Trailer, ProductInfo, Version,
-    FPVMode, PurchaseOption, Footer, ScreenshotAlbum, AppScreenshot, PrivacyPolicy
+    FPVMode, PurchaseOption, Footer, ScreenshotAlbum, AppScreenshot, PrivacyPolicy, ContactFormSettings
 )
 from .forms import ContactFormForm
 
@@ -54,6 +54,7 @@ def index(request):
         'fpv_mode': FPVMode.load(),
         'purchase_options': PurchaseOption.objects.all(),
         'footer': Footer.load(),
+        'contact_form_settings': ContactFormSettings.load(),
         'form': form,
     }
     return render(request, 'landing/index.html', context)

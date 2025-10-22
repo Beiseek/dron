@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     AboutBlock, Trailer, ProductInfo, Screenshot, Version,
-    FPVMode, PurchaseOption, Footer, ContactForm, ScreenshotAlbum, AppScreenshot, PrivacyPolicy
+    FPVMode, PurchaseOption, Footer, ContactForm, ScreenshotAlbum, AppScreenshot, PrivacyPolicy, ContactFormSettings
 )
 
 class SingletonModelAdmin(admin.ModelAdmin):
@@ -39,6 +39,11 @@ class PrivacyPolicyAdmin(SingletonModelAdmin):
     list_display = ('title', 'last_updated')
     fields = ('title', 'content', 'last_updated')
     readonly_fields = ('last_updated',)
+
+@admin.register(ContactFormSettings)
+class ContactFormSettingsAdmin(SingletonModelAdmin):
+    list_display = ('title',)
+    fields = ('title', 'subtitle', 'button_text')
 
 @admin.register(Version)
 class VersionAdmin(admin.ModelAdmin):

@@ -494,10 +494,10 @@
     <div class="container">
         <div class="contact-form-wrapper">
             <div class="contact-form-header text-center mb-4">
-                <h2 class="contact-form-title">Заявка на приобретение лицензии</h2>
-                <p class="contact-form-subtitle">Заполните форму, мы свяжемся с вами по указанным контактным данным и обсудим лучшие варианты приобретения симулятора</p>
+                <h2 class="contact-form-title">{{ contact_form_settings.title }}</h2>
+                <p class="contact-form-subtitle">{{ contact_form_settings.subtitle }}</p>
                 <button class="btn btn-outline-light contact-toggle mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#contactFormCollapse" aria-expanded="true" aria-controls="contactFormCollapse">
-                    Заполнить форму
+                    {{ contact_form_settings.button_text }}
                     <i class="fas fa-chevron-down toggle-icon"></i>
                 </button>
             </div>

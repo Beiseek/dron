@@ -139,3 +139,15 @@ class PrivacyPolicy(SingletonModel):
     
     def __str__(self):
         return self.title
+
+class ContactFormSettings(SingletonModel):
+    title = models.CharField(max_length=200, default="Заявка на приобретение лицензии", verbose_name="Заголовок формы")
+    subtitle = models.TextField(default="Заполните форму, мы свяжемся с вами по указанным контактным данным и обсудим лучшие варианты приобретения симулятора", verbose_name="Описание формы")
+    button_text = models.CharField(max_length=100, default="Заполнить форму", verbose_name="Текст кнопки")
+    
+    class Meta:
+        verbose_name = "Настройки формы обратной связи"
+        verbose_name_plural = "Настройки формы обратной связи"
+    
+    def __str__(self):
+        return "Настройки формы обратной связи"
