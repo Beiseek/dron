@@ -50,13 +50,22 @@ class PurchaseOptionAdmin(admin.ModelAdmin):
 
 @admin.register(ContactForm)
 class ContactFormAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'organization_name', 'email', 'phone', 'created_at')
-    readonly_fields = ('full_name', 'phone', 'email', 'organization_name', 'comment', 'privacy_policy_accepted', 'created_at')
-    list_filter = ('created_at',)
-    search_fields = ('full_name', 'organization_name', 'email')
-
-    def has_add_permission(self, request):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False
+    list_display = ('full_name', 'organization_name', 'email', 'phone', 'package', 'created_at')
+    list_filter = ('created_at', 'package')
+    search_fields = ('full_name', 'organization_name', 'email', 'phone')
+    readonly_fields = ('created_at',)
+    fieldsets = (
+        ('Контактная информация', {
+            'fields': ('full_name', 'phone', 'email', 'organization_name')
+        }),
+        ('Детали заявки', {
+            'fields': ('package', 'comment')
+        }),
+        ('Согласие', {
+            'fields': ('privacy_policy_accepted',)
+        }),
+        ('Системная информация', {
+            'fields': ('created_at',),
+            'classes': ('collapse',)
+        }),
+    )

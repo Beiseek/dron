@@ -1,0 +1,22 @@
+ИНСТРУКЦИЯ ПО ОБНОВЛЕНИЮ ФОРМЫ ОБРАТНОЙ СВЯЗИ
+
+1. ВЫПОЛНИТЕ В КОМАНДНОЙ СТРОКЕ (cmd.exe):
+
+git add .
+git commit -m "Убрал название квадросим из формы и улучшил админ панель заявок"
+git push origin main
+
+2. НА СЕРВЕРЕ ВЫПОЛНИТЕ:
+
+cd /var/www/dron-site
+source venv/bin/activate
+git pull origin main
+python manage.py collectstatic --noinput
+sudo systemctl restart gunicorn
+sudo systemctl reload nginx
+
+ИЗМЕНЕНИЯ:
+- Убрано название "КвадроСим" из описания формы
+- Заявки теперь можно редактировать в админ панели
+- Добавлены поля package в список и фильтры
+- Улучшена структура отображения заявок с группировкой полей
