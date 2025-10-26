@@ -2223,6 +2223,7 @@ select[name="package"].form-select {
 .contact-section-new {
     background: linear-gradient(180deg, rgba(14, 23, 44, 0) 0%, #0E172C 100%);
     padding: 100px 0;
+    /* ВРЕМЕННЫЙ КОММЕНТАРИЙ ДЛЯ ПРОВЕРКИ */
 }
 
 .contact-header {
