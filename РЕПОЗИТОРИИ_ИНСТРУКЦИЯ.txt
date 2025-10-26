@@ -1,0 +1,53 @@
+Два удалённых репозитория: GitHub и сервер.
+
+1) Инициализация локального репозитория (в cmd.exe):
+cd "C:\Users\ivans\OneDrive\Рабочий стол\dron"
+git init
+git add .
+git commit -m "init"
+
+2) GitHub-репозиторий:
+- Создайте пустой репозиторий на GitHub (например, dron-site)
+- Без README/LICENCE (или удалите их локально перед push)
+- Добавьте remote и отправьте:
+  git remote add origin https://github.com/<user>/dron-site.git
+  git branch -M main
+  git push -u origin main
+
+3) Репозиторий на сервере (bare):
+На сервере (SSH):
+  mkdir -p /srv/git/dron-site.git
+  cd /srv/git/dron-site.git
+  git init --bare
+  chown -R <user>:<group> /srv/git/dron-site.git
+
+На локальной машине:
+  git remote add prod ssh://<user>@<host>/srv/git/dron-site.git
+  git push -u prod main
+
+4) Деплой из prod-репозитория (post-receive hook):
+На сервере:
+  cat > /srv/git/dron-site.git/hooks/post-receive <<'SH'
+  #!/bin/bash
+  set -e
+  GIT_WORK_TREE=/var/www/dron-site
+  GIT_DIR=/srv/git/dron-site.git
+  export GIT_WORK_TREE
+  mkdir -p "$GIT_WORK_TREE"
+  git --git-dir="$GIT_DIR" --work-tree="$GIT_WORK_TREE" checkout -f
+  cd "$GIT_WORK_TREE"
+  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install -r requirements.txt
+  python manage.py collectstatic --noinput
+  python manage.py migrate --noinput
+  systemctl --user restart gunicorn || true
+  SH
+  chmod +x /srv/git/dron-site.git/hooks/post-receive
+
+5) Дополнительно:
+- Добавьте SECRET_KEY и настройки в .env
+- Настройте gunicorn+nginx (службы и конфиги)
+- Для Windows-cmd используйте команды без sudo/ssh если не требуется.
+
+Примечание: медиа-uploads хранить вне git, подключить в nginx как alias.

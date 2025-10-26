@@ -1,0 +1,21 @@
+[Unit]
+Description=gunicorn daemon for dron project
+After=network.target
+
+[Service]
+# Укажите вашего пользователя
+User=<ВАШ_ПОЛЬЗОВАТЕЛЬ>
+Group=www-data
+
+# Путь к директории проекта
+WorkingDirectory=/var/www/dron-site
+
+# Путь к исполняемому файлу gunicorn в виртуальном окружении
+ExecStart=/var/www/dron-site/venv/bin/gunicorn \
+    --access-logfile - \
+    --workers 3 \
+    --bind unix:/var/www/dron-site/gunicorn.sock \
+    dron_site.wsgi:application
+
+[Install]
+WantedBy=default.target

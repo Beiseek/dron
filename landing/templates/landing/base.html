@@ -1,0 +1,174 @@
+{% load django_bootstrap5 %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Национальный образовательный симулятор пилотирования дронов">
+    <title>Российский образовательный симулятор</title>
+    {% if page_settings.favicon %}
+    <link rel="icon" href="{{ page_settings.favicon.url }}">
+    {% endif %}
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+</head>
+<body>
+    
+    <header class="navbar navbar-expand-lg navbar-dark fixed-top custom-header">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="/media/logos/LogoCTLABHD.png" alt="КТЛАБ" class="header-logo">
+                <img src="/media/logos/Фонд_содействия_инновациям_2.png" alt="Фонд содействия инновациям" class="header-logo partner-logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">О нас</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#trailer">Трейлер</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#screenshots">Галерея</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#versions">Версии</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#fpv-mode">FPV</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#purchase-options">Цены</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="btn btn-primary header-btn" href="#contact" role="button">
+                            <i class="fas fa-envelope"></i>
+                            Получить консультацию
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="custom-footer" id="footer">
+        <div class="footer-background">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 mb-4 mb-lg-0">
+                            <div class="footer-logos">
+                                <div class="footer-logo-item">
+                                    {% if footer.our_logo %}
+                                        <img src="{{ footer.our_logo.url }}" alt="КТЛАБ" class="footer-logo">
+                                    {% else %}
+                                        <img src="/media/logos/LogoCTLABHD.png" alt="КТЛАБ" class="footer-logo">
+                                    {% endif %}
+                                    <div class="logo-text">
+                                        <h5>КТЛАБ</h5>
+                                        <p>Инновационные решения</p>
+                                    </div>
+                                </div>
+                                <div class="footer-logo-item">
+                                    {% if footer.partner_logo %}
+                                        <img src="{{ footer.partner_logo.url }}" alt="Фонд содействия инновациям" class="footer-logo">
+                                    {% else %}
+                                         <img src="/media/logos/Фонд_содействия_инновациям_2.png" alt="Фонд содействия инновациям" class="footer-logo">
+                                    {% endif %}
+                                    <div class="logo-text">
+                                        <h5>ФАСИ</h5>
+                                        <p>Фонд содействия инновациям</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 mb-4 mb-lg-0">
+                            <div class="footer-contact">
+                                <h5 class="footer-title">Контакты</h5>
+                                <div class="contact-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>{{ footer.email|default:"info@example.com" }}</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span>{{ footer.phone|default:"+7 (999) 123-45-67" }}</span>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Россия, Москва</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="footer-links">
+                                <h5 class="footer-title">Полезные ссылки</h5>
+                                <div class="footer-nav">
+                                    <a href="#about" class="footer-link">
+                                        <i class="fas fa-home"></i>
+                                        <span>О нас</span>
+                                    </a>
+                                    <a href="#trailer" class="footer-link">
+                                        <i class="fas fa-play"></i>
+                                        <span>Трейлер</span>
+                                    </a>
+                                    <a href="#screenshots" class="footer-link">
+                                        <i class="fas fa-images"></i>
+                                        <span>Галерея</span>
+                                    </a>
+                                    <a href="#contact" class="footer-link">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>Контакты</span>
+                                    </a>
+                                </div>
+                                <div class="footer-legal">
+                                    <a href="{% url 'privacy_policy' %}" class="legal-link">
+                                        <i class="fas fa-shield-alt"></i>
+                                        Политика конфиденциальности
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <p class="copyright">© 2025 КТЛАБ. Все права защищены.</p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <div class="footer-social">
+                                <span class="social-text">Следите за нами:</span>
+                                <div class="social-links">
+                                    <a href="#" class="social-link">
+                                        <i class="fab fa-telegram"></i>
+                                    </a>
+                                    <a href="#" class="social-link">
+                                        <i class="fab fa-vk"></i>
+                                    </a>
+                                    <a href="#" class="social-link">
+                                        <i class="fab fa-youtube"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% bootstrap_javascript %}
+</body>
+</html>
