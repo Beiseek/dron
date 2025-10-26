@@ -413,21 +413,29 @@
             <h2 class="contact-title">{{ footer.contact_title }}</h2>
             <p class="contact-subtitle">{{ footer.contact_subtitle }}</p>
         </div>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center align-items-stretch">
             <div class="col-lg-5 col-md-6 mb-4">
-                <div class="contact-card">
-                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
-                    <h3 class="contact-card-title">Телефон</h3>
-                    <p class="contact-card-text">{{ footer.phone }}</p>
-                    <a href="tel:{{ footer.phone|cut:' '|cut:'-'|cut:'(' |cut:')' }}" class="contact-card-link">Позвонить</a>
+                <div class="contact-card h-100">
+                    <div class="contact-card-body">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <h3 class="contact-card-title">Телефон</h3>
+                        <p class="contact-card-text">{{ footer.phone }}</p>
+                    </div>
+                    <div class="contact-card-footer">
+                        <a href="tel:{{ footer.phone|cut:' '|cut:'-'|cut:'(' |cut:')' }}" class="contact-card-link">Позвонить</a>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-5 col-md-6 mb-4">
-                <div class="contact-card">
-                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                    <h3 class="contact-card-title">Электронная почта</h3>
-                    <p class="contact-card-text">{{ footer.email }}</p>
-                    <a href="mailto:{{ footer.email }}" class="contact-card-link">Написать</a>
+                <div class="contact-card h-100">
+                    <div class="contact-card-body">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <h3 class="contact-card-title">Электронная почта</h3>
+                        <p class="contact-card-text">{{ footer.email }}</p>
+                    </div>
+                    <div class="contact-card-footer">
+                        <a href="mailto:{{ footer.email }}" class="contact-card-link">Написать</a>
+                    </div>
                 </div>
             </div>
         </div>
