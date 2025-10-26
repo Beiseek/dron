@@ -148,7 +148,6 @@ class PurchaseOptionsBlock(SingletonModel):
 class Footer(SingletonModel):
     contact_title = models.CharField(max_length=200, default="Свяжитесь с нами", verbose_name="Заголовок")
     contact_subtitle = models.TextField(default="Мы всегда готовы ответить на ваши вопросы и обсудить сотрудничество.", verbose_name="Подзаголовок")
-    address = models.CharField(max_length=300, default="Россия, Москва", verbose_name="Адрес")
     email = models.EmailField(default="m.korovob@yandex.ru", verbose_name="Email")
     phone = models.CharField(max_length=20, default="8 900 478 43 84", verbose_name="Телефон")
     our_logo = models.ImageField(upload_to='logos/', blank=True, null=True, verbose_name="Наш логотип (в футере)")

@@ -13,7 +13,7 @@ class SingletonModelAdmin(admin.ModelAdmin):
 class FooterAdmin(SingletonModelAdmin):
     fieldsets = (
         ('Блок "Свяжитесь с нами"', {
-            'fields': ('contact_title', 'contact_subtitle', 'address', 'email', 'phone')
+            'fields': ('contact_title', 'contact_subtitle', 'email', 'phone')
         }),
         ('Логотипы в футере', {
             'fields': ('our_logo', 'partner_logo'),
