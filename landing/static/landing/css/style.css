@@ -2225,6 +2225,10 @@ select[name="package"].form-select {
     padding: 100px 0;
 }
 
+.contact-header {
+    margin-bottom: 3rem !important;
+}
+
 .contact-header .contact-title {
     font-size: 3rem;
     font-weight: 700;
@@ -2240,52 +2244,53 @@ select[name="package"].form-select {
 }
 
 .contact-card {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    padding: 40px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-    height: 100%;
+    background-color: #1C2A48;
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid rgba(144, 202, 249, 0.1);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    text-align: left;
+    transition: all 0.3s ease;
 }
 
 .contact-card:hover {
-    transform: translateY(-10px);
-    background-color: rgba(255, 255, 255, 0.08);
-    border-color: #00aaff;
-    box-shadow: 0 10px 30px rgba(0, 170, 255, 0.1);
+    transform: translateY(-5px);
+    border-color: rgba(144, 202, 249, 0.3);
 }
 
-.contact-card .contact-icon {
-    font-size: 2.5rem;
-    color: #00aaff;
-    margin-bottom: 20px;
-    line-height: 1;
-}
-
-.contact-card .contact-card-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 15px;
-}
-
-.contact-card .contact-card-text {
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 25px;
+.contact-card-body {
     flex-grow: 1;
 }
 
+.contact-card .contact-icon {
+    font-size: 1rem;
+    color: #90caf9;
+    margin-bottom: 1rem;
+}
+
+.contact-card .contact-card-title {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+}
+
+.contact-card .contact-card-text {
+    font-size: 1.25rem;
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.contact-card-footer {
+    margin-top: auto;
+}
+
 .contact-card .contact-card-link {
-    display: inline-block;
-    color: #00aaff;
+    color: #90caf9;
     text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
+    font-weight: 500;
 }
 
 .contact-card .contact-card-link:hover {
