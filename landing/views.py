@@ -7,8 +7,8 @@ from django.utils.http import http_date
 from django.utils.timezone import now
 
 from .models import (
-    AboutBlock, Trailer, ProductInfo, ScreenshotAlbum, Version,
-    FPVMode, PurchaseOption, Footer, AppScreenshot, PrivacyPolicy, PageSettings
+    AboutBlock, Trailer, ProductInfo, ScreenshotAlbum, AppScreenshot, 
+    VersionsBlock, FPVMode, PurchaseOptionsBlock, Footer, PrivacyPolicy, PageSettings
 )
 
 
@@ -19,9 +19,9 @@ def index(request):
         'product_info': ProductInfo.load(),
         'screenshot_albums': ScreenshotAlbum.objects.prefetch_related('screenshots').all(),
         'app_screenshots': AppScreenshot.objects.all().order_by('order'),
-        'versions': Version.objects.all(),
+        'versions_block': VersionsBlock.load(),
         'fpv_mode': FPVMode.load(),
-        'purchase_options': PurchaseOption.objects.all(),
+        'purchase_options_block': PurchaseOptionsBlock.load(),
         'footer': Footer.load(),
         'page_settings': PageSettings.load(),
     }

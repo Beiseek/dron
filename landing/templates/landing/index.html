@@ -258,35 +258,17 @@
             <p class="versions-subtitle">{{ page_settings.versions_subtitle }}</p>
         </div>
         <div class="row">
-            {% for version in versions %}
-            <div class="col-lg-6 mb-4">
-                <div class="version-card version-card-{{ forloop.counter }}">
-                    <div class="version-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="version-content">
-                        <h4 class="version-title">{{ version.title }}</h4>
-                        <p class="version-description">{{ version.description }}</p>
-                        <div class="version-os">
-                            <span class="os-label">Поддержка ОС:</span>
-                            <div class="os-list">{{ version.supported_os }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <!-- Заглушки -->
             <div class="col-lg-6 mb-4">
                 <div class="version-card version-card-1">
                     <div class="version-icon">
                         <i class="fas fa-graduation-cap"></i>
                     </div>
                     <div class="version-content">
-                        <h4 class="version-title">Базовая версия</h4>
-                        <p class="version-description">Для школ, вузов, СПО, дополнительного образования. Подходит для обучения навыкам полета на квадрокоптерах весом до 30 кг и подготовки к решению определенных видов задач.</p>
+                        <h4 class="version-title">{{ versions_block.basic_title }}</h4>
+                        <p class="version-description">{{ versions_block.basic_description }}</p>
                         <div class="version-os">
                             <span class="os-label">Поддержка ОС:</span>
-                            <div class="os-list">Linux, Windows, macOS, РЕД ОС, Astra Linux, uncomOS</div>
+                            <div class="os-list">{{ versions_block.basic_supported_os }}</div>
                         </div>
                     </div>
                 </div>
@@ -297,16 +279,15 @@
                         <i class="fas fa-cogs"></i>
                     </div>
                     <div class="version-content">
-                        <h4 class="version-title">Кастомная версия</h4>
-                        <p class="version-description">Разработка версии под ваши уникальные требования.</p>
+                        <h4 class="version-title">{{ versions_block.custom_title }}</h4>
+                        <p class="version-description">{{ versions_block.custom_description }}</p>
                         <div class="version-os">
                             <span class="os-label">Поддержка ОС:</span>
-                            <div class="os-list">Linux, Windows, macOS, РЕД ОС, Astra Linux, uncomOS</div>
+                            <div class="os-list">{{ versions_block.custom_supported_os }}</div>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
     </div>
 </section>
@@ -369,104 +350,60 @@
             <p class="purchase-subtitle">{{ page_settings.purchase_options_subtitle }}</p>
         </div>
         <div class="row justify-content-center">
-            {% for option in purchase_options %}
             <div class="col-lg-5 mb-4">
-                <div class="purchase-card purchase-card-{{ forloop.counter }}">
+                <div class="purchase-card purchase-card-1">
                     <div class="purchase-header-card">
                         <div class="purchase-icon">
-                                <i class="fas fa-{% if forloop.first %}star{% else %}crown{% endif %}"></i>
-                                </div>
-                               <h4 class="purchase-name">{{ option.name }}</h4>
-                           </div>
-                           <div class="purchase-price">
-                            <span class="price-amount">{{ option.price }}</span>
-                        {% if not option.is_custom %}
-                        <span class="price-period">/лицензия</span>
-                    {% endif %}
+                            <i class="fas fa-star"></i>
+                        </div>
+                       <h4 class="purchase-name">{{ purchase_options_block.basic_name }}</h4>
+                   </div>
+                   <div class="purchase-price">
+                    <span class="price-amount">{{ purchase_options_block.basic_price }}</span>
+                    <span class="price-period">/лицензия</span>
                 </div>
                 <div class="purchase-features">
-                        {% for feature in option.get_features_list %}
+                    {% for feature in purchase_options_block.get_basic_features_list %}
+                        <div class="feature-item">
+                            <i class="fas fa-check"></i>
+                            <span>{{ feature }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <a href="#contact" class="purchase-btn">
+                    <span>Заказать</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                </div>
+            </div>
+             <div class="col-lg-5 mb-4">
+                <div class="purchase-card purchase-card-2">
+                    <div class="purchase-header-card">
+                        <div class="purchase-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                       <h4 class="purchase-name">{{ purchase_options_block.custom_name }}</h4>
+                   </div>
+                   <div class="purchase-price">
+                    <span class="price-amount">{{ purchase_options_block.custom_price }}</span>
+                    </div>
+                    <div class="purchase-features">
+                        {% for feature in purchase_options_block.get_custom_features_list %}
                             <div class="feature-item">
                                 <i class="fas fa-check"></i>
                                 <span>{{ feature }}</span>
                             </div>
                         {% endfor %}
-                                </div>
-                                <a href="#contact" class="purchase-btn">
-                                    <span>Заказать</span>
-                                    <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                         {% empty %}
-                         <!-- Заглушки -->
-                         <div class="col-lg-5 mb-4">
-                            <div class="purchase-card purchase-card-1">
-                                <div class="purchase-header-card">
-                                    <div class="purchase-icon">
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <h4 class="purchase-name">Базовая версия</h4>
-                                </div>
-                                <div class="purchase-price">
-                                    <span class="price-amount">5000 руб</span>
-                                    <span class="price-period">/лицензия</span>
-                                </div>
-                                <div class="purchase-features">
-                                    <div class="feature-item">
-                                        <i class="fas fa-check"></i>
-                                        <span>Полный доступ к симулятору</span>
-                                    </div>
-                                    <div class="feature-item">
-                                        <i class="fas fa-check"></i>
-                                        <span>Все локации и режимы</span>
-                                    </div>
-                                    <div class="feature-item">
-                                        <i class="fas fa-check"></i>
-                                        <span>Техническая поддержка</span>
-                                    </div>
-                                </div>
-                                <a href="#contact" class="purchase-btn">
-                                    <span>Заказать</span>
-                                    <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                         <div class="col-lg-5 mb-4">
-                            <div class="purchase-card purchase-card-2">
-                                <div class="purchase-header-card">
-                                    <div class="purchase-icon">
-                                        <i class="fas fa-crown"></i>
-                                    </div>
-                                    <h4 class="purchase-name">Кастомная версия</h4>
-                                </div>
-                                <div class="purchase-price">
-                                    <span class="price-amount">Цена по запросу</span>
-                                </div>
-                                <div class="purchase-features">
-                                    <div class="feature-item">
-                                        <i class="fas fa-check"></i>
-                                        <span>Индивидуальная разработка</span>
-                                    </div>
-                                    <div class="feature-item">
-                                        <i class="fas fa-check"></i>
-                                        <span>Персональные настройки</span>
-                                    </div>
-                                    <div class="feature-item">
-                                        <i class="fas fa-check"></i>
-                                        <span>Приоритетная поддержка</span>
-                                    </div>
-                                </div>
-                                <a href="#contact" class="purchase-btn">
-                                    <span>Заказать</span>
-                                    <i class="fas fa-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                         {% endfor %}
                     </div>
+                    <a href="#contact" class="purchase-btn">
+                        <span>Заказать</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
-            </section>
+            </div>
+        </div>
+    </div>
+</section>
 
 
 <!-- Форма заявки -->

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
-    AboutBlock, Trailer, ProductInfo, Screenshot, Version,
-    FPVMode, PurchaseOption, Footer, ScreenshotAlbum, AppScreenshot, PrivacyPolicy,
+    AboutBlock, Trailer, ProductInfo, Screenshot, VersionsBlock,
+    FPVMode, PurchaseOptionsBlock, Footer, ScreenshotAlbum, AppScreenshot, PrivacyPolicy,
     PageSettings
 )
 
@@ -64,11 +64,25 @@ class PrivacyPolicyAdmin(SingletonModelAdmin):
     readonly_fields = ('last_updated',)
 
 
-@admin.register(Version)
-class VersionAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+@admin.register(VersionsBlock)
+class VersionsBlockAdmin(SingletonModelAdmin):
+    fieldsets = (
+        ('Базовая версия', {
+            'fields': ('basic_title', 'basic_description', 'basic_supported_os')
+        }),
+        ('Кастомная версия', {
+            'fields': ('custom_title', 'custom_description', 'custom_supported_os'),
+        }),
+    )
 
-@admin.register(PurchaseOption)
-class PurchaseOptionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'is_custom')
-    fields = ('name', 'price', 'features', 'is_custom')
+
+@admin.register(PurchaseOptionsBlock)
+class PurchaseOptionsBlockAdmin(SingletonModelAdmin):
+    fieldsets = (
+        ('Базовый тариф', {
+            'fields': ('basic_name', 'basic_price', 'basic_features')
+        }),
+        ('Кастомный тариф', {
+            'fields': ('custom_name', 'custom_price', 'custom_features'),
+        }),
+    )

@@ -92,17 +92,22 @@ class AppScreenshot(models.Model):
         return self.title
 
 
-class Version(models.Model):
-    title = models.CharField(max_length=100, verbose_name="Название версии")
-    description = models.TextField(verbose_name="Описание")
-    supported_os = models.CharField(max_length=300, default="Linux, Windows, macOS, РЕД ОС, Astra Linux, uncomOS", verbose_name="Поддерживаемые ОС")
+class VersionsBlock(SingletonModel):
+    basic_title = models.CharField(max_length=100, verbose_name="Название (Базовая)", default="Базовая версия")
+    basic_description = models.TextField(verbose_name="Описание (Базовая)", default="Для школ, вузов, СПО, дополнительного образования. Подходит для обучения навыкам полета на квадрокоптерах весом до 30 кг и подготовки к решению определенных видов задач.")
+    basic_supported_os = models.CharField(max_length=300, default="Linux, Windows, macOS, РЕД ОС, Astra Linux, uncomOS", verbose_name="Поддерживаемые ОС (Базовая)")
+
+    custom_title = models.CharField(max_length=100, verbose_name="Название (Кастомная)", default="Кастомная версия")
+    custom_description = models.TextField(verbose_name="Описание (Кастомная)", default="Разработка версии под ваши уникальные требования.")
+    custom_supported_os = models.CharField(max_length=300, default="Linux, Windows, macOS, РЕД ОС, Astra Linux, uncomOS", verbose_name="Поддерживаемые ОС (Кастомная)")
 
     class Meta:
-        verbose_name = "Версия симулятора"
-        verbose_name_plural = "6. Версии симулятора"
+        verbose_name = "6. Секция 'Версии симулятора'"
+        verbose_name_plural = "6. Секция 'Версии симулятора'"
 
     def __str__(self):
-        return self.title
+        return "Секция 'Версии симулятора'"
+
 
 class FPVMode(SingletonModel):
     title = models.CharField(max_length=200, default="FPV режим", verbose_name="Заголовок")
@@ -116,21 +121,29 @@ class FPVMode(SingletonModel):
     def __str__(self):
         return "Блок FPV режима"
 
-class PurchaseOption(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Название тарифа")
-    price = models.CharField(max_length=100, verbose_name="Цена")
-    features = models.TextField(verbose_name="Особенности (каждая с новой строки)", default="Полный доступ к симулятору\nВсе локации и режимы\nТехническая поддержка")
-    is_custom = models.BooleanField(default=False, verbose_name="Это кастомный тариф?")
+
+class PurchaseOptionsBlock(SingletonModel):
+    basic_name = models.CharField(max_length=100, verbose_name="Название тарифа (Базовый)", default="Базовая версия")
+    basic_price = models.CharField(max_length=100, verbose_name="Цена (Базовый)", default="5000 руб")
+    basic_features = models.TextField(verbose_name="Особенности (Базовый)", default="Полный доступ к симулятору\nВсе локации и режимы\nТехническая поддержка")
+
+    custom_name = models.CharField(max_length=100, verbose_name="Название тарифа (Кастомный)", default="Кастомная версия")
+    custom_price = models.CharField(max_length=100, verbose_name="Цена (Кастомный)", default="Цена по запросу")
+    custom_features = models.TextField(verbose_name="Особенности (Кастомный)", default="Индивидуальная разработка\nПерсональные настройки\nПриоритетная поддержка")
 
     class Meta:
-        verbose_name = "Вариант приобретения"
-        verbose_name_plural = "8. Варианты приобретения"
+        verbose_name = "8. Секция 'Варианты приобретения'"
+        verbose_name_plural = "8. Секция 'Варианты приобретения'"
 
     def __str__(self):
-        return self.name
+        return "Секция 'Варианты приобретения'"
 
-    def get_features_list(self):
-        return [feature.strip() for feature in self.features.split('\n') if feature.strip()]
+    def get_basic_features_list(self):
+        return [feature.strip() for feature in self.basic_features.split('\n') if feature.strip()]
+
+    def get_custom_features_list(self):
+        return [feature.strip() for feature in self.custom_features.split('\n') if feature.strip()]
+
 
 class Footer(SingletonModel):
     contact_title = models.CharField(max_length=200, default="Свяжитесь с нами", verbose_name="Заголовок")
