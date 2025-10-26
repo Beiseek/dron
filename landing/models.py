@@ -17,90 +17,114 @@ class SingletonModel(models.Model):
         return obj
 
 class AboutBlock(SingletonModel):
-    title = models.CharField(max_length=200, default="Тренажер БПЛА с реалистичной физикой и режимом от первого лица")
-    text_in_frame = models.TextField(default="Отрабатывайте пилотирование в реальных полетных условиях и на разнообразных картах в режиме свободного полета. Усложните задачу: выследите и найдите подвижную цель на локациях с помощью специального режима «Поиск».")
-    subtitle = models.CharField(max_length=200, default="Симулятор FPV дронов с детально проработанной физикой")
+    title = models.CharField(max_length=200, default="Тренажер БПЛА с реалистичной физикой и режимом от первого лица", verbose_name="Заголовок на главном экране")
+    text_in_frame = models.TextField(default="Отрабатывайте пилотирование в реальных полетных условиях и на разнообразных картах в режиме свободного полета. Усложните задачу: выследите и найдите подвижную цель на локациях с помощью специального режима «Поиск».", verbose_name="Текст в рамке")
+    subtitle = models.CharField(max_length=200, default="Симулятор FPV дронов с детально проработанной физикой", verbose_name="Подзаголовок (не используется)")
+
+    class Meta:
+        verbose_name = "1. Главный блок"
+        verbose_name_plural = "1. Главный блок"
 
     def __str__(self):
-        return "Основной блок 'О нас'"
+        return "Главный блок"
 
 class Trailer(SingletonModel):
     title = models.CharField(max_length=200, default="Трейлер симулятора", verbose_name="Заголовок секции")
     subtitle = models.TextField(default="Посмотрите видео, чтобы узнать больше о возможностях нашего симулятора", verbose_name="Подзаголовок секции")
-    video_url = models.URLField(blank=True, null=True, help_text="URL видео с YouTube или другого видеохостинга")
-    local_video = models.FileField(upload_to='videos/', blank=True, null=True, help_text="Либо загрузите видеофайл")
+    video_url = models.URLField(blank=True, null=True, help_text="URL видео с YouTube или другого видеохостинга", verbose_name="Ссылка на YouTube видео")
+    local_video = models.FileField(upload_to='videos/', blank=True, null=True, help_text="Либо загрузите видеофайл", verbose_name="Локальное видео")
+
+    class Meta:
+        verbose_name = "2. Секция 'Трейлер'"
+        verbose_name_plural = "2. Секция 'Трейлер'"
 
     def __str__(self):
         return "Трейлер"
 
 class ProductInfo(SingletonModel):
-    title = models.CharField(max_length=200, default="О продукте", verbose_name="Заголовок блока 'О продукте'")
-    image = models.ImageField(upload_to='product_images/')
-    description = models.TextField(default="""Симулятор управления дроном создан для тренировки навыков управления БПЛА. В нем представлено множество локаций и сценариев, таких как:
+    title = models.CharField(max_length=200, default="О продукте", verbose_name="Заголовок")
+    image = models.ImageField(upload_to='product_images/', verbose_name="Изображение")
+    description = models.TextField(default="...", verbose_name="Описание")
 
-пилотирование дрона в городе;
-использование дрона в лесной и сельской местности;
-полеты на заброшенном заводе;
-гонки на дронах;
-и другие.
-
-Каждый из биомов обладает своими уникальными особенностями, а вариативность сложности трасс позволяет беспрерывно оттачивать навыки пилотирования на высокой скорости. Это комплексное решение предназначено для подготовки как начинающих спортсменов, так и профессионалов дрон-рейсинга и не имеет аналогов в Российской Федерации.""")
+    class Meta:
+        verbose_name = "3. Блок 'О продукте'"
+        verbose_name_plural = "3. Блок 'О продукте'"
 
     def __str__(self):
         return "Блок информации о продукте"
 
 class ScreenshotAlbum(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    order = models.PositiveIntegerField(default=0, db_index=True)
+    title = models.CharField(max_length=100, unique=True, verbose_name="Название локации")
+    order = models.PositiveIntegerField(default=0, db_index=True, verbose_name="Порядок")
 
     class Meta:
         ordering = ['order']
+        verbose_name = "Альбом скриншотов локаций"
+        verbose_name_plural = "4. Альбомы скриншотов локаций"
 
     def __str__(self):
         return self.title
 
 class Screenshot(models.Model):
-    album = models.ForeignKey(ScreenshotAlbum, on_delete=models.CASCADE, related_name='screenshots')
-    image = models.ImageField(upload_to='screenshots/')
-    caption = models.CharField(max_length=100, blank=True)
+    album = models.ForeignKey(ScreenshotAlbum, on_delete=models.CASCADE, related_name='screenshots', verbose_name="Альбом")
+    image = models.ImageField(upload_to='screenshots/', verbose_name="Изображение")
+    caption = models.CharField(max_length=100, blank=True, verbose_name="Подпись")
+
+    class Meta:
+        verbose_name = "Скриншот локации"
+        verbose_name_plural = "Скриншоты локаций"
 
     def __str__(self):
         return f"Скриншот для {self.album.title}"
 
 class AppScreenshot(models.Model):
-    title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='app_screenshots/')
-    description = models.TextField(blank=True)
-    order = models.PositiveIntegerField(default=0, db_index=True)
+    title = models.CharField(max_length=100, verbose_name="Название скриншота")
+    image = models.ImageField(upload_to='app_screenshots/', verbose_name="Изображение")
+    description = models.TextField(blank=True, verbose_name="Описание (не используется)")
+    order = models.PositiveIntegerField(default=0, db_index=True, verbose_name="Порядок")
 
     class Meta:
         ordering = ['order']
+        verbose_name = "Скриншот интерфейса"
+        verbose_name_plural = "5. Скриншоты интерфейса"
 
     def __str__(self):
         return self.title
 
 
 class Version(models.Model):
-    title = models.CharField(max_length=100)
-    description = models.TextField()
-    supported_os = models.CharField(max_length=300, default="Linux, Windows, macOS, РЕД ОС, Astra Linux, uncomOS")
+    title = models.CharField(max_length=100, verbose_name="Название версии")
+    description = models.TextField(verbose_name="Описание")
+    supported_os = models.CharField(max_length=300, default="Linux, Windows, macOS, РЕД ОС, Astra Linux, uncomOS", verbose_name="Поддерживаемые ОС")
+
+    class Meta:
+        verbose_name = "Версия симулятора"
+        verbose_name_plural = "6. Версии симулятора"
 
     def __str__(self):
         return self.title
 
 class FPVMode(SingletonModel):
-    title = models.CharField(max_length=200, default="FPV режим", verbose_name="Заголовок FPV режима")
-    image = models.ImageField(upload_to='fpv_images/')
-    description = models.TextField(default="Симулятор FPV дронов с детально проработанной физикой для тренировок в режиме от первого лица.", verbose_name="Описание FPV режима")
+    title = models.CharField(max_length=200, default="FPV режим", verbose_name="Заголовок")
+    image = models.ImageField(upload_to='fpv_images/', verbose_name="Изображение")
+    description = models.TextField(default="Симулятор FPV дронов с детально проработанной физикой для тренировок в режиме от первого лица.", verbose_name="Описание")
+
+    class Meta:
+        verbose_name = "7. Блок 'FPV режим'"
+        verbose_name_plural = "7. Блок 'FPV режим'"
 
     def __str__(self):
         return "Блок FPV режима"
 
 class PurchaseOption(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name="Название тарифа")
+    price = models.CharField(max_length=100, verbose_name="Цена")
     features = models.TextField(verbose_name="Особенности (каждая с новой строки)", default="Полный доступ к симулятору\nВсе локации и режимы\nТехническая поддержка")
-    is_custom = models.BooleanField(default=False)
+    is_custom = models.BooleanField(default=False, verbose_name="Это кастомный тариф?")
+
+    class Meta:
+        verbose_name = "Вариант приобретения"
+        verbose_name_plural = "8. Варианты приобретения"
 
     def __str__(self):
         return self.name
@@ -109,32 +133,20 @@ class PurchaseOption(models.Model):
         return [feature.strip() for feature in self.features.split('\n') if feature.strip()]
 
 class Footer(SingletonModel):
-    email = models.EmailField(default="m.korovob@yandex.ru")
-    phone = models.CharField(max_length=20, default="8 900 478 43 84")
-    our_logo = models.ImageField(upload_to='logos/', blank=True, null=True)
-    partner_logo = models.ImageField(upload_to='logos/', blank=True, null=True)
+    contact_title = models.CharField(max_length=200, default="Свяжитесь с нами", verbose_name="Заголовок")
+    contact_subtitle = models.TextField(default="Мы всегда готовы ответить на ваши вопросы и обсудить сотрудничество.", verbose_name="Подзаголовок")
+    address = models.CharField(max_length=300, default="Россия, Москва", verbose_name="Адрес")
+    email = models.EmailField(default="m.korovob@yandex.ru", verbose_name="Email")
+    phone = models.CharField(max_length=20, default="8 900 478 43 84", verbose_name="Телефон")
+    our_logo = models.ImageField(upload_to='logos/', blank=True, null=True, verbose_name="Наш логотип (в футере)")
+    partner_logo = models.ImageField(upload_to='logos/', blank=True, null=True, verbose_name="Логотип партнера (в футере)")
+
+    class Meta:
+        verbose_name = "9. Контакты и футер"
+        verbose_name_plural = "9. Контакты и футер"
 
     def __str__(self):
-        return "Футер"
-
-class ContactForm(models.Model):
-    PACKAGE_CHOICES = (
-        ('basic', 'Базовая версия'),
-        ('custom', 'Кастомная версия'),
-    )
-
-    full_name = models.CharField(max_length=150)
-    phone = models.CharField(max_length=20)
-    email = models.EmailField()
-    organization_name = models.CharField(max_length=200)
-    package = models.CharField(max_length=20, choices=PACKAGE_CHOICES, default='basic')
-    comment = models.TextField(blank=True, null=True)
-    privacy_policy_accepted = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Заявка от {self.full_name} ({self.organization_name})"
-
+        return "Футер и блок контактов"
 
 class PrivacyPolicy(SingletonModel):
     title = models.CharField(max_length=200, default="Политика конфиденциальности", verbose_name="Заголовок")
@@ -147,18 +159,6 @@ class PrivacyPolicy(SingletonModel):
     
     def __str__(self):
         return self.title
-
-class ContactFormSettings(SingletonModel):
-    title = models.CharField(max_length=200, default="Заявка на приобретение лицензии", verbose_name="Заголовок формы")
-    subtitle = models.TextField(default="Заполните форму, мы свяжемся с вами по указанным контактным данным и обсудим лучшие варианты приобретения симулятора", verbose_name="Описание формы")
-    button_text = models.CharField(max_length=100, default="Заполнить форму", verbose_name="Текст кнопки")
-    
-    class Meta:
-        verbose_name = "Настройки формы обратной связи"
-        verbose_name_plural = "Настройки формы обратной связи"
-    
-    def __str__(self):
-        return "Настройки формы обратной связи"
 
 
 class PageSettings(SingletonModel):
@@ -177,8 +177,8 @@ class PageSettings(SingletonModel):
     purchase_options_subtitle = models.TextField(default="Выберите подходящий тариф для ваших потребностей", verbose_name="Подзаголовок секции 'Варианты приобретения'")
 
     class Meta:
-        verbose_name = "Настройки секций страницы"
-        verbose_name_plural = "Настройки секций страницы"
+        verbose_name = "0. Общие настройки страницы"
+        verbose_name_plural = "0. Общие настройки страницы"
 
     def __str__(self):
-        return "Настройки секций страницы"
+        return "Общие настройки страницы"

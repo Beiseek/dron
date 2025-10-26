@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     AboutBlock, Trailer, ProductInfo, Screenshot, Version,
-    FPVMode, PurchaseOption, Footer, ContactForm, ScreenshotAlbum, AppScreenshot, PrivacyPolicy, ContactFormSettings,
+    FPVMode, PurchaseOption, Footer, ScreenshotAlbum, AppScreenshot, PrivacyPolicy,
     PageSettings
 )
 
@@ -9,8 +9,19 @@ class SingletonModelAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return self.model.objects.count() == 0
 
+@admin.register(Footer)
+class FooterAdmin(SingletonModelAdmin):
+    fieldsets = (
+        ('Блок "Свяжитесь с нами"', {
+            'fields': ('contact_title', 'contact_subtitle', 'address', 'email', 'phone')
+        }),
+        ('Логотипы в футере', {
+            'fields': ('our_logo', 'partner_logo'),
+            'classes': ('collapse',)
+        }),
+    )
+
 admin.site.register(AboutBlock, SingletonModelAdmin)
-admin.site.register(Footer, SingletonModelAdmin)
 admin.site.register(PageSettings, SingletonModelAdmin)
 
 @admin.register(Trailer)
@@ -52,10 +63,6 @@ class PrivacyPolicyAdmin(SingletonModelAdmin):
     fields = ('title', 'content', 'last_updated')
     readonly_fields = ('last_updated',)
 
-@admin.register(ContactFormSettings)
-class ContactFormSettingsAdmin(SingletonModelAdmin):
-    list_display = ('title',)
-    fields = ('title', 'subtitle', 'button_text')
 
 @admin.register(Version)
 class VersionAdmin(admin.ModelAdmin):
@@ -65,25 +72,3 @@ class VersionAdmin(admin.ModelAdmin):
 class PurchaseOptionAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'is_custom')
     fields = ('name', 'price', 'features', 'is_custom')
-
-@admin.register(ContactForm)
-class ContactFormAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'organization_name', 'email', 'phone', 'package', 'created_at')
-    list_filter = ('created_at', 'package')
-    search_fields = ('full_name', 'organization_name', 'email', 'phone')
-    readonly_fields = ('created_at',)
-    fieldsets = (
-        ('Контактная информация', {
-            'fields': ('full_name', 'phone', 'email', 'organization_name')
-        }),
-        ('Детали заявки', {
-            'fields': ('package', 'comment')
-        }),
-        ('Согласие', {
-            'fields': ('privacy_policy_accepted',)
-        }),
-        ('Системная информация', {
-            'fields': ('created_at',),
-            'classes': ('collapse',)
-        }),
-    )
