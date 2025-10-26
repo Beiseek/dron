@@ -23,6 +23,7 @@ class ProductInfoAdmin(SingletonModelAdmin):
 
 @admin.register(FPVMode)
 class FPVModeAdmin(SingletonModelAdmin):
+    list_display = ('title',)
     fields = ('title', 'description', 'image')
 
 class ScreenshotInline(admin.TabularInline):

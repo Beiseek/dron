@@ -89,8 +89,9 @@ class Version(models.Model):
         return self.title
 
 class FPVMode(SingletonModel):
+    title = models.CharField(max_length=200, default="FPV режим", verbose_name="Заголовок FPV режима")
     image = models.ImageField(upload_to='fpv_images/')
-    description = models.TextField(default="Симулятор FPV дронов с детально проработанной физикой для тренировок в режиме от первого лица.")
+    description = models.TextField(default="Симулятор FPV дронов с детально проработанной физикой для тренировок в режиме от первого лица.", verbose_name="Описание FPV режима")
 
     def __str__(self):
         return "Блок FPV режима"
