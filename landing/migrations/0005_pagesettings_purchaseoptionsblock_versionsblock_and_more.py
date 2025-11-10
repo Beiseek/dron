@@ -62,12 +62,6 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': "6. Секция 'Версии симулятора'",
             },
         ),
-        migrations.DeleteModel(
-            name='PurchaseOption',
-        ),
-        migrations.DeleteModel(
-            name='Version',
-        ),
         migrations.AlterModelOptions(
             name='aboutblock',
             options={'verbose_name': '1. Главный блок', 'verbose_name_plural': '1. Главный блок'},
