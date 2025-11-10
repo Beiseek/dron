@@ -20,6 +20,7 @@ class AboutBlock(SingletonModel):
     title = models.CharField(max_length=200, default="Тренажер БПЛА с реалистичной физикой и режимом от первого лица", verbose_name="Заголовок на главном экране")
     text_in_frame = models.TextField(default="Отрабатывайте пилотирование в реальных полетных условиях и на разнообразных картах в режиме свободного полета. Усложните задачу: выследите и найдите подвижную цель на локациях с помощью специального режима «Поиск».", verbose_name="Текст в рамке")
     subtitle = models.CharField(max_length=200, default="Симулятор FPV дронов с детально проработанной физикой", verbose_name="Подзаголовок (не используется)")
+    hero_image = models.ImageField(upload_to='backgrounds/', blank=True, null=True, verbose_name="Изображение фона Hero (верхняя секция)")
 
     class Meta:
         verbose_name = "1. Главный блок"

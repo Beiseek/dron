@@ -5,7 +5,7 @@
 {% block content %}
 
 <!-- Основной блок: Hero Section -->
-<section id="about" class="text-white">
+<section id="about" class="text-white"{% if about_block.hero_image %} style="background-image: url('{{ about_block.hero_image.url }}'); background-size: cover; background-position: center; background-repeat: no-repeat;"{% endif %}>
     <div class="container text-center">
         <h1>{{ about_block.title }}</h1>
         <div class="row mt-4 hero-content align-items-center">
