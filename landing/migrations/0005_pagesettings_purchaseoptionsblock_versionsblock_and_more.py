@@ -63,9 +63,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.DeleteModel(
-            name='ContactForm',
-        ),
-        migrations.DeleteModel(
             name='PurchaseOption',
         ),
         migrations.DeleteModel(
