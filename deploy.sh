@@ -1,51 +1,138 @@
 #!/bin/bash
+# deploy.sh
+
+# Stop script on error
 set -e
 
-# --- Переменные ---
-PROJECT_NAME="dron"
-GIT_REPO="https://github.com/Beiseek/dron.git"
+# --- CONFIGURATION ---
+DOMAIN="ktlab.store"
+IP="194.67.124.149"
+REPO="https://github.com/Beiseek/dron.git"
 PROJECT_DIR="/var/www/dron-site"
-VENV_DIR="$PROJECT_DIR/venv"
-USER=$(whoami) # Используем текущего пользователя
+# ---------------------
 
-echo "--- 1. Обновление системы и установка зависимостей ---"
-sudo apt-get update
-sudo apt-get install -y python3-venv python3-pip nginx git
+echo "=========================================="
+echo "STARTING DEPLOYMENT TO $IP ($DOMAIN)"
+echo "=========================================="
 
-echo "--- 2. Настройка брандмауэра ---"
-sudo ufw allow 'Nginx Full'
-sudo ufw allow 'OpenSSH'
-sudo ufw --force enable
+# 1. Update System
+echo "[1/9] Updating system packages..."
+apt-get update -qq && apt-get upgrade -y -qq
 
-echo "--- 3. Клонирование репозитория из GitHub ---"
-sudo mkdir -p $PROJECT_DIR
-sudo chown -R $USER:$USER $PROJECT_DIR
-git clone $GIT_REPO $PROJECT_DIR
+# 2. Install Dependencies
+echo "[2/9] Installing system dependencies..."
+apt-get install -y -qq python3-venv python3-dev python3-pip nginx git certbot python3-certbot-nginx sqlite3 libsqlite3-dev
 
-cd $PROJECT_DIR
+# 3. Clone/Update Repository
+echo "[3/9] Setting up project files..."
+if [ -d "$PROJECT_DIR" ]; then
+    echo "Directory exists. Removing old version to ensure clean slate..."
+    rm -rf "$PROJECT_DIR"
+fi
+echo "Cloning repository..."
+git clone "$REPO" "$PROJECT_DIR"
+cd "$PROJECT_DIR"
 
-echo "--- 4. Создание виртуального окружения и установка зависимостей Python ---"
+# 4. Setup Virtual Environment
+echo "[4/9] Setting up Python environment..."
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 pip install gunicorn
 
-echo "--- 5. Настройка Django ---"
-# Создание .env файла для секретных данных
-echo "SECRET_KEY=$(python3 -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')" > .env
-echo "DEBUG=False" >> .env
-echo "ALLOWED_HOSTS=ktlab.store,91.229.9.60" >> .env
+# 5. Django Configuration
+echo "[5/9] Configuring Django..."
+# Run migrations
+python3 manage.py migrate
 
-# Применение миграций и сбор статики
-python manage.py makemigrations
-python manage.py migrate
-python manage.py collectstatic --noinput
+# Collect static files
+python3 manage.py collectstatic --noinput
 
-echo "--- 6. Тестовый запуск Gunicorn ---"
-# Это нужно для проверки, что приложение запускается
-# Вы можете прервать его после проверки (Ctrl+C)
-echo "Сейчас будет тестовый запуск. Если ошибок нет, остановите его (Ctrl+C) и продолжайте по инструкции."
-gunicorn --bind 0.0.0.0:8000 dron_site.wsgi
+# Create superuser (admin/admin) if not exists
+echo "Creating default superuser..."
+cat <<EOF | python3 manage.py shell
+from django.contrib.auth import get_user_model
+User = get_user_model()
+if not User.objects.filter(username='admin').exists():
+    User.objects.create_superuser('admin', 'admin@example.com', 'admin')
+    print('Superuser "admin" created.')
+else:
+    print('Superuser "admin" already exists.')
+EOF
 
-echo "--- Установка завершена! ---"
-echo "Далее настройте Gunicorn и Nginx, используя файлы gunicorn.service и nginx.conf."
+# 6. Setup Gunicorn
+echo "[6/9] Configuring Gunicorn..."
+cat > /etc/systemd/system/gunicorn.service <<EOF
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=$PROJECT_DIR
+ExecStart=$PROJECT_DIR/venv/bin/gunicorn --access-logfile - --workers 3 --bind 127.0.0.1:8000 dron_site.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable gunicorn
+systemctl restart gunicorn
+
+# 7. Setup Nginx
+echo "[7/9] Configuring Nginx..."
+cat > /etc/nginx/sites-available/dron <<EOF
+server {
+    listen 80;
+    server_name $DOMAIN $IP;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    
+    location /static/ {
+        alias $PROJECT_DIR/staticfiles/;
+    }
+
+    location /media/ {
+        alias $PROJECT_DIR/media/;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+}
+EOF
+
+# Enable site
+ln -sf /etc/nginx/sites-available/dron /etc/nginx/sites-enabled/
+rm -f /etc/nginx/sites-enabled/default
+
+# Set Permissions
+mkdir -p $PROJECT_DIR/media
+chown -R www-data:www-data $PROJECT_DIR/media
+chmod -R 775 $PROJECT_DIR/media
+chown -R www-data:www-data $PROJECT_DIR/staticfiles
+chmod -R 755 $PROJECT_DIR/staticfiles
+
+# Check and restart Nginx
+nginx -t
+systemctl restart nginx
+
+# 8. SSL Certificate
+echo "[8/9] Setting up SSL with Let's Encrypt..."
+# Using --non-interactive mode
+certbot --nginx -d $DOMAIN --non-interactive --agree-tos -m admin@ktlab.store --redirect
+
+# 9. Final Check
+echo "=========================================="
+echo "DEPLOYMENT COMPLETE!"
+echo "Website: https://$DOMAIN"
+echo "Admin Panel: https://$DOMAIN/admin"
+echo "Login: admin"
+echo "Password: admin"
+echo "=========================================="
